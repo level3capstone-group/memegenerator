@@ -1,17 +1,8 @@
 import React from 'react';
-import Editform from './EditForm';
+import Editform from './Editform';
 
-export default function memelist(props) {
-    const {
-        randomImage, 
-        topText, 
-        bottomText, 
-        id, 
-        handleDeleteFromList, 
-        handleEditList, 
-        toggleEdit, 
-        handleEditChange
-    } = props
+export default function Memelist(props) {
+    const {randomImage, topText, bottomText, id, handleDeleteFromList, handleEditList, toggleEdit, handleEditChange} = props;
 
     return (
             <form className="meme-list" id={id} >

@@ -1,35 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import Memelist from './MemeList';
-import { v4 as uuidv4 } from 'uuid'
+import React, {useState, useEffect} from 'react';
+import Memelist from './Memelist'
 
-//A user will see a meme image on page load
-export default function Meme() {    
-    const [meme, setMeme] = useState({
-        id: 451155,
+
+export default function Form() {
+    const [meme, setMeme] = React.useState({
+        id: '61582',
         topText: "",
         bottomText: "",
         randomImage: "http://i.imgflip.com/1bij.jpg",
         edit: false
     })
-    const [allMemeImages, setAllMemeImages] = useState([])
+    useEffect(() => {
+            fetch("https://api.imgflip.com/get_memes")
+            .then(res => setAllMemeImages(res.data.data.memes))
+            .catch(err => console.error(err))
+    }, [meme])
+    
+    const [allMemeImages, setAllMemeImages] = useState()
 
     useEffect(() => {
         fetch("https://api.imgflip.com/get_memes")
         .then(res => res.json())
         .then(res => setAllMemeImages(res.data.memes))
     }, [])
-
-    const getMemeImage = (e) => {
-        e.preventDefault()
-        const randomNumber = Math.floor(Math.random() * allMemeImages.length)
-        const url = allMemeImages[randomNumber].url
-        const id = allMemeImages[randomNumber].id
-        setMeme(prevMeme => ({
-            ...prevMeme, 
-            randomImage: url, 
-            id: id
-        }))
-    }
 
     const handleChange = (e) => {
         const {name, value} = e.target
@@ -43,13 +36,13 @@ export default function Meme() {
 
     const [memeList, setMemeList] = useState([])
     const [toggleEdit, setToggleEdit] = useState(false)
-
+    
     const handleAddToList = (e) => {
         e.preventDefault()
         setMemeList(prevList => ([...prevList, meme]))
         setMeme(
             {
-                id: uuidv4,
+                id: '61582',
                 topText: "",
                 bottomText: "",
                 randomImage: "http://i.imgflip.com/1bij.jpg",
@@ -57,14 +50,9 @@ export default function Meme() {
             }
         )
     }
-
     const handleDeleteFromList = (id) => {
         setMemeList(memeList.filter(meme => meme.id !== id))
     }
-
-     /* A user will see a form with two inputs and a submit button, - Inputs will be:
-    - top text
-    - bottom text */
     const handleEditList = (id) => {
         setToggleEdit(prevToggle => !prevToggle)
         memeList.find(meme => meme.id === id)
@@ -94,11 +82,16 @@ export default function Meme() {
             handleEditChange={handleEditChange}
         />
     ))
-
     const styles = {
         border: "5px solid black"
     }
-
+    const getMemeImage = (e) => {
+        e.preventDefault()
+        const randomNumber = Math.floor(Math.random() * allMemeImages.length)
+        const url = allMemeImages[randomNumber].url
+        const id = allMemeImages[randomNumber].id
+        setMeme(prevMeme => ({...prevMeme, randomImage: url, id: id}))
+    }
     return (
         <div className="form" >
             <form onSubmit={handleAddToList}>
@@ -119,12 +112,11 @@ export default function Meme() {
                     onChange={handleChange}
                 />
                 <br />
-                {/* A user can click "refresh meme image" to load a new one */}
                 <input 
                     onClick={getMemeImage} 
                     type="submit" 
                     className="generate" 
-                    value="Get a new meme image "
+                    value="Get a new meme image 🖼"
                 />
                 <div className="meme-container">
                     <img src={meme.randomImage} className="meme-Image" alt=""/>

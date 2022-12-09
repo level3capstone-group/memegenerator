@@ -7,6 +7,4 @@ export default function Editform(props){
             Bottom Text: <input name="bottomText" value={props.bottomText} onChange={props.onChange}/>
         </>
     )
-
-    
 }
